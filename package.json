@@ -18,7 +18,8 @@
   },
   "packageManager": "npm@10.2.3",
   "workspaces": [
-    "apps/*",
+    "web/*",
+    "server/*",
     "packages/*"
   ]
 }
