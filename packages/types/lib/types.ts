@@ -43,7 +43,6 @@ export interface IFieldFilter {
 
 type valueType<T = unknown> = string | number | boolean | null | T;
 
-
 export interface IAPIV1Response<D = object[] | object> {
   version: "v1";
   locale: string;
@@ -64,8 +63,27 @@ export interface IOption {
   [key: string]: number | string | boolean;
 }
 
-
 export interface ITimestamp {
-  createdAt?: Date;
-  updatedAt?: Date;
+  created_at?: Date;
+  updated_at?: Date;
+}
+
+export interface IModifier<T = string> {
+  created_by?: Date;
+  updated_by?: Date;
+}
+
+export interface IBaseModelAttributes extends ITimestamp, IModifier {
+  id?: string;
+}
+
+export interface IAddress {
+  zip_code?: string;
+  street_line_1: string;
+  street_line_2?: string;
+  city?: string;
+  state?: string;
+  suit_number?: string;
+  apartment_unit_number?: string;
+  phone_number?: string;
 }
