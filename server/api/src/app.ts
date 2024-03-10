@@ -1,3 +1,5 @@
+import { initSequelizeMiddleware } from "./middleware/initSequelize.middleware";
+
 require("dotenv").config();
 import "express-async-errors";
 
@@ -29,7 +31,7 @@ app.use(cors());
 app.use((req, res, next) => {
   const clientIP = req.ip;
 
-  if (!allowList || !allowList.length || allowList.includes(clientIP)) {
+  if (!allowList || !allowList.length || allowList.includes(clientIP!)) {
     next();
   } else {
     throw new ForbiddenError();
@@ -44,7 +46,6 @@ app.use(
 
 app.use(bodyParser.json());
 
-app.use(express.json());
 
 
 // Graceful shutdown function
@@ -84,7 +85,7 @@ app.use(helmet()); // https://expressjs.com/en/advanced/best-practice-security.h
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-
+app.use(initSequelizeMiddleware)
 app.use("/", indexRouter);
 
 app.use(

@@ -1,6 +1,6 @@
 import swaggerJsdoc from "swagger-jsdoc";
 
-const schemas = require("@quadspire/sd-shared/schema.json");
+// const schemas = require("@quadspire/sd-shared/schema.json");
 
 const options: swaggerJsdoc.Options = {
   definition: {
@@ -66,6 +66,6 @@ const options: swaggerJsdoc.Options = {
   apis: ["./src/routes/**/*.ts"],
 };
 
-const swaggerSpec = { ...swaggerJsdoc(options), ...schemas };
+const swaggerSpec = { ...swaggerJsdoc(options) };
 
 export default swaggerSpec;

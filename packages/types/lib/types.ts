@@ -69,13 +69,15 @@ export interface ITimestamp {
 }
 
 export interface IModifier<T = string> {
-  created_by?: Date;
-  updated_by?: Date;
+  created_by?: string;
+  updated_by?: string;
 }
 
 export interface IBaseModelAttributes extends ITimestamp, IModifier {
   id?: string;
 }
+
+export type modelAttributesOptionalTypes = 'id' | 'created_at' | 'updated_at' | 'created_by' | 'updated_by'
 
 export interface IAddress {
   zip_code?: string;

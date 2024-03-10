@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction, RequestHandler } from "express";
 import { NotAuthorizedError } from "../errors/NotAuthorizedError";
-import { PermissionsEnum } from "../const/roles";
 
 export const authorizationMiddleware = (
   permissionsHandler:
@@ -8,9 +7,9 @@ export const authorizationMiddleware = (
     | ((req: Request<unknown, unknown, unknown, unknown>) => Promise<boolean>),
 ): RequestHandler<unknown, unknown, unknown, unknown> => {
   return async (req, res: Response, next: NextFunction) => {
-    if (!req.currentUser) {
-      throw new NotAuthorizedError();
-    }
+    // if (!req.currentUser) {
+    //   throw new NotAuthorizedError();
+    // }
 
     if (typeof permissionsHandler === "function") {
       const permissionResponse = await permissionsHandler(req);

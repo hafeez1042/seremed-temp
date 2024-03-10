@@ -1,5 +1,5 @@
-import { IModifier } from "../../types";
+import { IBaseModelAttributes, IModifier } from "../../types";
 
-export interface ISuperAdmin extends IModifier {
+export interface ISuperAdmin extends IBaseModelAttributes {
   user_id: string;
 }

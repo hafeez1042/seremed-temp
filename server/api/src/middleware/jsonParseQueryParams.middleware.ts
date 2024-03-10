@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { IQueryStringParams } from "@quadspire/sd-shared/lib/types";
+import { IQueryStringParams } from "@seremedi/types/lib/types";
 
 export const jsonParseQueryParamsMiddleware: RequestHandler<unknown, unknown, unknown, {
   query: unknown

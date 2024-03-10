@@ -1,7 +1,6 @@
 import { ErrorRequestHandler } from "express";
 import { CustomError } from "./CustomError";
 import { IAPIResponse } from "../types/IAPIResponse";
-import { Locale } from "../data/locale";
 
 export const errorHandler: ErrorRequestHandler<unknown, IAPIResponse> = (
   err,
@@ -17,7 +16,7 @@ export const errorHandler: ErrorRequestHandler<unknown, IAPIResponse> = (
     const errors = err.serializeErrors();
     return res.status(err.statusCode).send({
       success: false,
-      locale: Locale.enUS,
+      // locale: Locale.enUS,
       errors: errors.map((error) => error.message),
     });
   }
@@ -25,7 +24,7 @@ export const errorHandler: ErrorRequestHandler<unknown, IAPIResponse> = (
   console.error("Error", err);
   res.status(400).send({
     success: false,
-    locale: Locale.enUS,
+    // locale: Locale.enUS,
     errors: ["Something went wrong"],
   });
 };

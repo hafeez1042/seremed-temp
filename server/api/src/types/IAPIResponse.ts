@@ -1,9 +1,8 @@
 import { ErrorMessages, SuccessMessages } from "../errors/errorsMessages";
-import { Locale } from "../data/locale";
 
 export interface IAPIResponse<D = object[] | object> {
   version?: string;
-  locale: Locale;
+  // locale: Locale;
   success: boolean;
   message?: SuccessMessages | ErrorMessages;
   errors?: string[];

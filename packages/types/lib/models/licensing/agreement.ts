@@ -1,6 +1,6 @@
-import { IModifier } from "../../types";
+import { IBaseModelAttributes } from "../../types";
 
-export interface IAgreement extends IModifier {
+export interface IAgreement extends IBaseModelAttributes {
   /**
    * Agreement content
    */

@@ -1,6 +1,6 @@
 import { IAPIResponse } from "./IAPIResponse";
 import { RequestHandler } from "express";
-import { IQueryStringParams } from "@quadspire/sd-shared/lib/types";
+import { IQueryStringParams } from "@seremedi/types/lib/types";
 
 export interface ICRUDController<T = object> {
   create?: RequestHandler<unknown, IAPIV1Response, T>;

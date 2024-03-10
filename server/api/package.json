@@ -10,13 +10,15 @@
     "test:watch": "jest --watchAll",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
-    "seed": "tsc && node .build/src/seed/index.js"
+    "seed": "tsc && node .build/src/seed/index.js",
+    "migration:licensing": "sequelize db:migrate --migrations-path sequelize/migrations/licensing --env licensing"
   },
   "dependencies": {
     "@aws-sdk/client-cognito-identity-provider": "^3.511.0",
     "@aws-sdk/client-s3": "^3.456.0",
     "@aws-sdk/client-sts": "^3.454.0",
     "@aws-sdk/s3-request-presigner": "^3.456.0",
+    "@seremedi/types": "*",
     "aws-jwt-verify": "^4.0.0",
     "aws-sdk": "^2.1512.0",
     "body-parser": "^1.20.2",

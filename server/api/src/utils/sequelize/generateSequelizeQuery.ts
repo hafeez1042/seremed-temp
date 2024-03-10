@@ -2,7 +2,7 @@ import { FindOptions, Op, WhereOptions } from "sequelize";
 import {
   IFieldFilter,
   IQueryStringParams,
-} from "@quadspire/sd-shared/lib/types";
+} from "@seremedi/types/lib/types";
 
 export const generateSequelizeQuery = (
   params: IQueryStringParams,
