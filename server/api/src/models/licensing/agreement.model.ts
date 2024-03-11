@@ -1,11 +1,15 @@
-import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
+import { DataTypes, Model, Optional, Sequelize } from "sequelize";
 import { IAgreement } from "@seremedi/types/lib/models/licensing/agreement"; // Adjust import path as necessary
 import { modelAttributesOptionalTypes } from "@seremedi/types/lib/types";
 
-interface IAgreementCreationAttributes extends Optional<IAgreement, modelAttributesOptionalTypes> {}
+interface IAgreementCreationAttributes
+  extends Optional<IAgreement, modelAttributesOptionalTypes> {}
 
 export function initializeAgreementModel(sequelize: Sequelize) {
-  class Agreement extends Model<IAgreement, IAgreementCreationAttributes> implements IAgreement {
+  class Agreement
+    extends Model<IAgreement, IAgreementCreationAttributes>
+    implements IAgreement
+  {
     public id!: string;
     public agreement!: string;
     public agreement_type!: string;
@@ -46,11 +50,11 @@ export function initializeAgreementModel(sequelize: Sequelize) {
       updated_by: DataTypes.UUID,
     },
     {
-      tableName: 'agreements',
+      tableName: "agreements",
       sequelize,
       timestamps: true,
-      createdAt: 'created_at',
-      updatedAt: 'updated_at',
+      createdAt: "created_at",
+      updatedAt: "updated_at",
     }
   );
 

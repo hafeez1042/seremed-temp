@@ -12,7 +12,7 @@ export interface IAccessControl extends IBaseModelAttributes {
   list?: boolean;
   read?: boolean;
   create?: boolean;
-  update?: boolean;
+  edit?: boolean;
   delete?: boolean;
   system_defined?: boolean;
   role_id: string;

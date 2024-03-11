@@ -77,15 +77,30 @@ export interface IBaseModelAttributes extends ITimestamp, IModifier {
   id?: string;
 }
 
-export type modelAttributesOptionalTypes = 'id' | 'created_at' | 'updated_at' | 'created_by' | 'updated_by'
+export type modelAttributesOptionalTypes =
+  | "id"
+  | "created_at"
+  | "updated_at"
+  | "created_by"
+  | "updated_by";
 
 export interface IAddress {
-  zip_code?: string;
+  suit_number?: string;
+  apartment_unit_number?: string;
   street_line_1: string;
   street_line_2?: string;
   city?: string;
+  county?: string;
   state?: string;
-  suit_number?: string;
-  apartment_unit_number?: string;
+  country: string;
+  zip_code?: string;
   phone_number?: string;
+  email: string;
+
+  address_type: AddressTypeEnum;
+}
+
+export enum AddressTypeEnum {
+  Office = "OFFICE",
+  Home = "Home",
 }
