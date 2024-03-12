@@ -15,11 +15,11 @@ module.exports = {
         type: Sequelize.UUID,
         allowNull: false,
         references: {
-          model: 'customers', // Name of the table for foreign key
+          model: 'customers',
           key: 'id',
         },
         onUpdate: 'CASCADE',
-        onDelete: 'RESTRICT', // Choose "CASCADE" or "SET NULL" as appropriate
+        onDelete: 'RESTRICT',
       },
       license_count: {
         type: Sequelize.INTEGER,
