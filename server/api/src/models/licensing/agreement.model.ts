@@ -1,6 +1,7 @@
 import { DataTypes, Model, Optional, Sequelize } from "sequelize";
 import { IAgreement } from "@seremedi/types/lib/models/licensing/agreement"; // Adjust import path as necessary
 import { modelAttributesOptionalTypes } from "@seremedi/types/lib/types";
+import { ModelType } from "../../types/types";
 
 interface IAgreementCreationAttributes
   extends Optional<IAgreement, modelAttributesOptionalTypes> {}
@@ -58,5 +59,18 @@ export function initializeAgreementModel(sequelize: Sequelize) {
     }
   );
 
-  return Agreement;
+  return Agreement as ModelType<
+    IAgreement,
+    IAgreementCreationAttributes,
+    Agreement
+  >;
+}
+
+export function initializeAgreementModelAssociation(
+  AgreementModel: ModelType,
+  UserTosModel: ModelType
+) {
+  AgreementModel.hasMany(UserTosModel, {
+    foreignKey: "agreement_id",
+  });
 }

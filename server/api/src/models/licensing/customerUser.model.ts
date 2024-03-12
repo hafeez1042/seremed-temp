@@ -1,5 +1,6 @@
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 import { ICustomerUser, CustomerUserStatus } from "@seremedi/types/lib/models/licensing/customerUser"; // Adjust import path as necessary
+import { ModelType } from '../../types/types';
 
 interface ICustomerUserCreationAttributes extends Optional<ICustomerUser, 'id' | 'created_at' | 'updated_at' | 'created_by' | 'updated_by'> {}
 
@@ -49,5 +50,18 @@ export function initializeCustomerUserModel(sequelize: Sequelize) {
     }
   );
 
-  return CustomerUser;
+  return CustomerUser as ModelType<ICustomerUser, ICustomerUserCreationAttributes, CustomerUser>;
+}
+
+export function initializeCustomerUserModelAssociation(
+  CustomerUserModel: ModelType,
+  UserModel: ModelType,
+  CustomerModel: ModelType
+) {
+  CustomerUserModel.belongsTo(UserModel, {
+    foreignKey: "user_id"
+  });
+  CustomerUserModel.belongsTo(CustomerModel, {
+    foreignKey: "customer_id"
+  });
 }

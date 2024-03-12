@@ -1,5 +1,6 @@
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 import { ISuperAdmin } from "@seremedi/types/lib/models/licensing/superAdmin"; // Adjust import path as necessary
+import { ModelType } from '../../types/types';
 
 interface ISuperAdminCreationAttributes extends Optional<ISuperAdmin, 'id' | 'created_at' | 'updated_at' | 'created_by' | 'updated_by'> {}
 
@@ -38,5 +39,15 @@ export function initializeSuperAdminModel(sequelize: Sequelize) {
     }
   );
 
-  return SuperAdmin;
+  return SuperAdmin as ModelType<ISuperAdmin, ISuperAdminCreationAttributes, SuperAdmin>;
 }
+
+export function initializeSuperAdminModelAssociation(
+  SuperAdmin: ModelType,
+  UserModel: ModelType
+) {
+  SuperAdmin.belongsTo(UserModel, {
+    foreignKey: "user_id",
+  });
+}
+

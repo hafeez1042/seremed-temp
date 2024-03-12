@@ -63,8 +63,3 @@ export function initializeLicenseModel(sequelize: Sequelize) {
 
   return License as ModelType<ILicense, ILicenseCreationAttributes, License>;
 }
-
-
-export const initializeLicenseRelations = (LicenseModel: ModelType<ILicense, ILicenseCreationAttributes>, CustomerModel: ModelType) => {
-  LicenseModel.belongsTo(CustomerModel, {foreignKey: "customer_id", as: 'customer'})
-}

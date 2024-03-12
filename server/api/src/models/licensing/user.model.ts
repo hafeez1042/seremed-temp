@@ -1,10 +1,10 @@
-import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
-import { IUser } from "@seremedi/types/lib/models/licensing/user"
-import { modelAttributesOptionalTypes } from "@seremedi/types/lib/types"
+import { DataTypes, Model, Optional, Sequelize } from "sequelize";
+import { IUser } from "@seremedi/types/lib/models/licensing/user";
+import { modelAttributesOptionalTypes } from "@seremedi/types/lib/types";
 import { ModelType } from "../../types/types";
 
-export interface IUserCreationAttributes extends Optional<IUser, modelAttributesOptionalTypes> {
-}
+export interface IUserCreationAttributes
+  extends Optional<IUser, modelAttributesOptionalTypes> {}
 
 export function initializeUserModel(sequelize: Sequelize) {
   class User extends Model<IUser, IUserCreationAttributes> implements IUser {
@@ -38,13 +38,29 @@ export function initializeUserModel(sequelize: Sequelize) {
       updated_by: DataTypes.UUID,
     },
     {
-      tableName: 'users',
+      tableName: "users",
       sequelize,
       timestamps: true,
-      createdAt: 'created_at',
-      updatedAt: 'updated_at',
+      createdAt: "created_at",
+      updatedAt: "updated_at",
     }
   );
 
   return User as ModelType<IUser, IUserCreationAttributes, User>;
+}
+
+export function initializeUserModelAssociation(
+  UserModel: ModelType,
+  CustomerUserModel: ModelType,
+  UserTOSModel: ModelType,
+  SuperAdminModel: ModelType,
+  CustomerModel: ModelType
+) {
+  UserModel.belongsToMany(CustomerModel, {
+    through: CustomerUserModel,
+    uniqueKey: "user_id",
+  });
+  UserModel.hasMany(CustomerUserModel, { foreignKey: "user_id" });
+  UserModel.hasMany(UserTOSModel, { foreignKey: "user_id" });
+  UserModel.hasOne(SuperAdminModel, { foreignKey: "user_id" });
 }

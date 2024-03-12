@@ -1,5 +1,6 @@
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 import { IUserTos } from "@seremedi/types/lib/models/licensing/userTos"; // Adjust the import path as necessary
+import { ModelType } from '../../types/types';
 
 interface IUserTosCreationAttributes extends Optional<IUserTos, 'id' | 'created_at' | 'updated_at' | 'created_by' | 'updated_by'> {}
 
@@ -53,5 +54,11 @@ export function initializeUserTosModel(sequelize: Sequelize) {
     }
   );
 
-  return UserTos;
+  return UserTos as ModelType<IUserTos, IUserTosCreationAttributes, UserTos>;
+}
+
+
+export function initializeUserTosModelAssociation(UserTOSModel: ModelType, UserModel: ModelType, AgreementModel: ModelType) {
+  UserTOSModel.belongsTo(UserModel, {foreignKey: "user_id"})
+  UserTOSModel.belongsTo(AgreementModel, {foreignKey: "agreement_id"})
 }

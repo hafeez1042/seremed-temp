@@ -1,6 +1,7 @@
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 import { ICustomer } from "@seremedi/types/lib/models/licensing/customer"; // Adjust import path as needed
 import { modelAttributesOptionalTypes } from "@seremedi/types/lib/types";
+import { ModelType } from '../../types/types';
 
 interface ICustomerCreationAttributes extends Optional<ICustomer, modelAttributesOptionalTypes> {}
 
@@ -49,6 +50,20 @@ export function initializeCustomerModel(sequelize: Sequelize) {
     }
   );
 
-  return Customer;
+  return Customer as ModelType<ICustomer, ICustomerCreationAttributes, Customer>;
+}
+
+export function initializeCustomerModelAssociation(
+  CustomerModel: ModelType,
+  UserModel: ModelType,
+  CustomerUserModel: ModelType,
+  LicensesModel: ModelType,
+) {
+  CustomerModel.belongsToMany(UserModel, {
+    through: CustomerUserModel,
+    uniqueKey: "customer_id",
+  });
+  CustomerModel.hasMany(CustomerUserModel, { foreignKey: "customer_id" });
+  CustomerModel.hasMany(LicensesModel, { foreignKey: "customer_id" });
 }
 
