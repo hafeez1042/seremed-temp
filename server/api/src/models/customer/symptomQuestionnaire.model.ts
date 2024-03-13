@@ -1,11 +1,19 @@
 import { DataTypes, Model, Optional, Sequelize } from "sequelize";
 import { ISymptomQuestionnaire } from "@seremedi/types/lib/models/customer/symptomQuestionnaire"; // Correct the import path as needed
 import { modelAttributesOptionalTypes } from "@seremedi/types/lib/types";
+import { ModelType } from "../../types/types";
 
-interface ISymptomQuestionnaireCreationAttributes extends Optional<ISymptomQuestionnaire, modelAttributesOptionalTypes> {}
+interface ISymptomQuestionnaireCreationAttributes
+  extends Optional<ISymptomQuestionnaire, modelAttributesOptionalTypes> {}
 
 export function initializeSymptomQuestionnaireModel(sequelize: Sequelize) {
-  class SymptomQuestionnaire extends Model<ISymptomQuestionnaire, ISymptomQuestionnaireCreationAttributes> implements ISymptomQuestionnaire {
+  class SymptomQuestionnaire
+    extends Model<
+      ISymptomQuestionnaire,
+      ISymptomQuestionnaireCreationAttributes
+    >
+    implements ISymptomQuestionnaire
+  {
     public id!: string;
     public question!: string;
     public symptom_id!: string;
@@ -16,35 +24,56 @@ export function initializeSymptomQuestionnaireModel(sequelize: Sequelize) {
     public updated_by!: string;
   }
 
-  SymptomQuestionnaire.init({
-    id: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
-      primaryKey: true,
-    },
-    question: {
-      type: DataTypes.TEXT,
-      allowNull: false,
-    },
-    symptom_id: {
-      type: DataTypes.UUID,
-      allowNull: false,
-      references: {
-        model: 'symptoms', // Ensure this matches your actual symptoms table name
-        key: 'id',
+  SymptomQuestionnaire.init(
+    {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
       },
+      question: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+      },
+      symptom_id: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        references: {
+          model: "symptoms", // Ensure this matches your actual symptoms table name
+          key: "id",
+        },
+      },
+      created_at: DataTypes.DATE,
+      updated_at: DataTypes.DATE,
+      created_by: DataTypes.UUID,
+      updated_by: DataTypes.UUID,
     },
-    created_at: DataTypes.DATE,
-    updated_at: DataTypes.DATE,
-    created_by: DataTypes.UUID,
-    updated_by: DataTypes.UUID,
-  }, {
-    sequelize,
-    tableName: "symptom_questionnaires",
-    timestamps: true,
-    createdAt: "created_at",
-    updatedAt: "updated_at",
+    {
+      sequelize,
+      tableName: "symptom_questionnaires",
+      timestamps: true,
+      createdAt: "created_at",
+      updatedAt: "updated_at",
+    }
+  );
+
+  return SymptomQuestionnaire as ModelType<
+    ISymptomQuestionnaire,
+    ISymptomQuestionnaireCreationAttributes,
+    SymptomQuestionnaire
+  >;
+}
+
+export function initializeSymptomQuestionnaireModelAssociation(
+  SymptomQuestionnaireModel: ModelType,
+  SymptomQuestionnaireResponseModel: ModelType,
+  SymptomModel: ModelType
+) {
+  SymptomQuestionnaireModel.belongsTo(SymptomModel, {
+    foreignKey: "symptom_id",
   });
 
-  return SymptomQuestionnaire;
+  SymptomQuestionnaireModel.hasMany(SymptomQuestionnaireResponseModel, {
+    foreignKey: "symptom_questionnaire_id",
+  });
 }

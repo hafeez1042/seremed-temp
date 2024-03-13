@@ -1,6 +1,7 @@
 import { DataTypes, Model, Optional, Sequelize } from "sequelize";
 import { IVital } from "@seremedi/types/lib/models/customer/vital"; // Adjust the import path as necessary
 import { modelAttributesOptionalTypes } from "@seremedi/types/lib/types";
+import { ModelType } from "../../types/types";
 
 interface IVitalCreationAttributes extends Optional<IVital, modelAttributesOptionalTypes> {}
 
@@ -42,5 +43,15 @@ export function initializeVitalModel(sequelize: Sequelize) {
     updatedAt: "updated_at",
   });
 
-  return Vital;
+  return Vital as ModelType<IVital, IVitalCreationAttributes, Vital>;
+}
+
+
+export function initializeVitalModelAssociation(
+  VitalModel: ModelType,
+  ClientVitalModel: ModelType
+) {
+  VitalModel.hasMany(ClientVitalModel, {
+    foreignKey: "vital_id",
+  });
 }

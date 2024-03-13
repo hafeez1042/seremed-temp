@@ -1,11 +1,16 @@
 import { DataTypes, Model, Optional, Sequelize } from "sequelize";
 import { ITaskType } from "@seremedi/types/lib/models/customer/taskType"; // Adjust the import path as needed
 import { modelAttributesOptionalTypes } from "@seremedi/types/lib/types";
+import { ModelType } from "../../types/types";
 
-interface ITaskTypeCreationAttributes extends Optional<ITaskType, modelAttributesOptionalTypes> {}
+interface ITaskTypeCreationAttributes
+  extends Optional<ITaskType, modelAttributesOptionalTypes> {}
 
 export function initializeTaskTypeModel(sequelize: Sequelize) {
-  class TaskType extends Model<ITaskType, ITaskTypeCreationAttributes> implements ITaskType {
+  class TaskType
+    extends Model<ITaskType, ITaskTypeCreationAttributes>
+    implements ITaskType
+  {
     public id!: string;
     public name!: string;
     public task_category!: string;
@@ -20,47 +25,63 @@ export function initializeTaskTypeModel(sequelize: Sequelize) {
     public updated_by!: string;
   }
 
-  TaskType.init({
-    id: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
-      primaryKey: true,
+  TaskType.init(
+    {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+      },
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      task_category: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      need_consent: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+      },
+      allow_refusal: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+      },
+      schedulable: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+      },
+      as_needed: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+      },
+      created_at: DataTypes.DATE,
+      updated_at: DataTypes.DATE,
+      created_by: DataTypes.UUID,
+      updated_by: DataTypes.UUID,
     },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    task_category: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    need_consent: {
-      type: DataTypes.BOOLEAN,
-      allowNull: true,
-    },
-    allow_refusal: {
-      type: DataTypes.BOOLEAN,
-      allowNull: true,
-    },
-    schedulable: {
-      type: DataTypes.BOOLEAN,
-      allowNull: true,
-    },
-    as_needed: {
-      type: DataTypes.BOOLEAN,
-      allowNull: true,
-    },
-    created_at: DataTypes.DATE,
-    updated_at: DataTypes.DATE,
-    created_by: DataTypes.UUID,
-    updated_by: DataTypes.UUID,
-  }, {
-    sequelize,
-    tableName: "task_types",
-    timestamps: true,
-    createdAt: "created_at",
-    updatedAt: "updated_at",
-  });
+    {
+      sequelize,
+      tableName: "task_types",
+      timestamps: true,
+      createdAt: "created_at",
+      updatedAt: "updated_at",
+    }
+  );
 
-  return TaskType;
+  return TaskType as ModelType<
+    ITaskType,
+    ITaskTypeCreationAttributes,
+    TaskType
+  >;
+}
+
+export function initializeTaskTypeModelAssociation(
+  TaskTypesModel: ModelType,
+  TaskModel: ModelType
+) {
+  TaskTypesModel.hasMany(TaskModel, {
+    foreignKey: "task_type_id",
+  });
 }
