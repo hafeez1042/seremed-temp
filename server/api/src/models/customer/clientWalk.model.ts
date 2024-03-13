@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
 import { IClientWalk } from "@seremedi/types/lib/models/customer/clientWalk";
+import { ModelType } from "../../types/types";
 
 export function initializeClientWalkModel(sequelize: Sequelize) {
   class ClientWalk extends Model<IClientWalk> implements IClientWalk {
@@ -48,5 +49,14 @@ export function initializeClientWalkModel(sequelize: Sequelize) {
     updatedAt: "updated_at",
   });
 
-  return ClientWalk;
+  return ClientWalk as ModelType<IClientWalk, IClientWalk, ClientWalk>;
+}
+
+export function initializeClientWalkModelAssociation(
+  ClientWalkModel: ModelType,
+  ClientTaskModel: ModelType,
+) {
+  ClientWalkModel.belongsTo(ClientTaskModel, {
+    foreignKey: "client_task_id",
+  });
 }

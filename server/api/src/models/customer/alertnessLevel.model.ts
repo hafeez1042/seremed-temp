@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
 import { IAlertnessLevel } from "@seremedi/types/lib/models/customer/alertnessLevel"; // Adjust the import path as necessary
+import { ModelType } from "../../types/types";
 
 export function initializeAlertnessLevelModel(sequelize: Sequelize) {
   class AlertnessLevel extends Model<IAlertnessLevel> implements IAlertnessLevel {
@@ -43,5 +44,14 @@ export function initializeAlertnessLevelModel(sequelize: Sequelize) {
     updatedAt: "updated_at",
   });
 
-  return AlertnessLevel;
+  return AlertnessLevel as ModelType<IAlertnessLevel, IAlertnessLevel, AlertnessLevel>;
+}
+
+export function initializeAlertnessLevelModelAssociation(
+  AlertnessLevelModel: ModelType,
+  ClientVitalModel: ModelType,
+) {
+  AlertnessLevelModel.belongsTo(ClientVitalModel, {
+    foreignKey: "client_vital_id",
+  });
 }

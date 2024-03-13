@@ -1,11 +1,16 @@
 import { DataTypes, Model, Optional, Sequelize } from "sequelize";
 import { IClientAllergy } from "@seremedi/types/lib/models/customer/clientAllergy"; // Adjust the import path as necessary
 import { modelAttributesOptionalTypes } from "@seremedi/types/lib/types";
+import { ModelType } from "../../types/types";
 
-interface IClientAllergyCreationAttributes extends Optional<IClientAllergy, modelAttributesOptionalTypes> {}
+interface IClientAllergyCreationAttributes
+  extends Optional<IClientAllergy, modelAttributesOptionalTypes> {}
 
 export function initializeClientAllergyModel(sequelize: Sequelize) {
-  class ClientAllergy extends Model<IClientAllergy, IClientAllergyCreationAttributes> implements IClientAllergy {
+  class ClientAllergy
+    extends Model<IClientAllergy, IClientAllergyCreationAttributes>
+    implements IClientAllergy
+  {
     public id!: string;
     public allergy_id?: string;
     public client_id?: string;
@@ -16,39 +21,60 @@ export function initializeClientAllergyModel(sequelize: Sequelize) {
     public updated_by!: string;
   }
 
-  ClientAllergy.init({
-    id: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
-      primaryKey: true,
-    },
-    allergy_id: {
-      type: DataTypes.UUID,
-      allowNull: true,
-      references: {
-        model: 'allergies', // Make sure this matches your allergies table name
-        key: 'id',
+  ClientAllergy.init(
+    {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
       },
-    },
-    client_id: {
-      type: DataTypes.UUID,
-      allowNull: true,
-      references: {
-        model: 'clients', // Make sure this matches your clients table name
-        key: 'id',
+      allergy_id: {
+        type: DataTypes.UUID,
+        allowNull: true,
+        references: {
+          model: "allergies", // Make sure this matches your allergies table name
+          key: "id",
+        },
       },
+      client_id: {
+        type: DataTypes.UUID,
+        allowNull: true,
+        references: {
+          model: "clients", // Make sure this matches your clients table name
+          key: "id",
+        },
+      },
+      created_at: DataTypes.DATE,
+      updated_at: DataTypes.DATE,
+      created_by: DataTypes.UUID,
+      updated_by: DataTypes.UUID,
     },
-    created_at: DataTypes.DATE,
-    updated_at: DataTypes.DATE,
-    created_by: DataTypes.UUID,
-    updated_by: DataTypes.UUID,
-  }, {
-    sequelize,
-    tableName: "client_allergies",
-    timestamps: true,
-    createdAt: "created_at",
-    updatedAt: "updated_at",
+    {
+      sequelize,
+      tableName: "client_allergies",
+      timestamps: true,
+      createdAt: "created_at",
+      updatedAt: "updated_at",
+    }
+  );
+
+  return ClientAllergy as ModelType<
+    IClientAllergy,
+    IClientAllergyCreationAttributes,
+    ClientAllergy
+  >;
+}
+
+export function initializeClientAllergyModelAssociation(
+  ClientAllergyModel: ModelType,
+  ClientModel: ModelType,
+  AllergyModel: ModelType
+) {
+  ClientAllergyModel.belongsTo(ClientModel, {
+    foreignKey: "client_id",
   });
 
-  return ClientAllergy;
+  ClientAllergyModel.belongsTo(AllergyModel, {
+    foreignKey: "allergy_id",
+  });
 }

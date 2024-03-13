@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
 import { IClientTask } from "@seremedi/types/lib/models/customer/clientTask"; // Adjust the import path as necessary
+import { ModelType } from "../../types/types";
 
 export function initializeClientTaskModel(sequelize: Sequelize) {
   class ClientTask extends Model<IClientTask> implements IClientTask {
@@ -74,5 +75,63 @@ export function initializeClientTaskModel(sequelize: Sequelize) {
     updatedAt: "updated_at",
   });
 
-  return ClientTask;
+  return ClientTask as ModelType<IClientTask, IClientTask, ClientTask>;
+}
+
+export function initializeClientTaskModelAssociation(
+  ClientTaskModel: ModelType,
+  TaskModel: ModelType,
+  ClientModel: ModelType,
+  TaskHistoryModel: ModelType,
+  TaskMediaModel: ModelType,
+  ClientVitalModel: ModelType,
+  ClientFluidIntakeModel: ModelType,
+  ClientSupplementIntakeModel: ModelType,
+  ClientMedicationModel: ModelType,
+  ClientRestingModel: ModelType,
+  ClientWalkingModel: ModelType,
+  ClientConsentModel: ModelType,
+  ClientRefusalModel: ModelType,
+  ClientSymptomModel: ModelType,
+) {
+  ClientTaskModel.belongsTo(TaskModel, {
+    foreignKey: "task_id",
+  });
+  ClientTaskModel.belongsTo(ClientModel, {
+    foreignKey: "client_id",
+  });
+  ClientTaskModel.belongsTo(ClientConsentModel, {
+    foreignKey: "client_consent_id",
+  });
+  ClientTaskModel.belongsTo(ClientRefusalModel, {
+    foreignKey: "client_refusal_id",
+  });
+
+  ClientTaskModel.hasMany(TaskHistoryModel, {
+    foreignKey: "client_task_id"
+  })
+  ClientTaskModel.hasMany(TaskMediaModel, {
+    foreignKey: "client_task_id"
+  })
+  ClientTaskModel.hasMany(ClientMedicationModel, {
+    foreignKey: "client_task_id"
+  })
+  ClientTaskModel.hasMany(ClientVitalModel, {
+    foreignKey: "client_task_id"
+  })
+  ClientTaskModel.hasMany(ClientFluidIntakeModel, {
+    foreignKey: "client_task_id"
+  })
+  ClientTaskModel.hasMany(ClientSupplementIntakeModel, {
+    foreignKey: "client_task_id"
+  })
+  ClientTaskModel.hasMany(ClientRestingModel, {
+    foreignKey: "client_task_id"
+  })
+  ClientTaskModel.hasMany(ClientWalkingModel, {
+    foreignKey: "client_task_id"
+  })
+  ClientTaskModel.hasMany(ClientSymptomModel, {
+    foreignKey: "client_task_id"
+  })
 }

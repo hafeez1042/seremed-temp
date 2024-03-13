@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
 import { ITaskMedia } from "@seremedi/types/lib/models/customer/taskMedia"; // Adjust the import path as necessary
+import { ModelType } from "../../types/types";
 
 export function initializeTaskMediaModel(sequelize: Sequelize) {
   class TaskMedia extends Model<ITaskMedia> implements ITaskMedia {
@@ -48,5 +49,14 @@ export function initializeTaskMediaModel(sequelize: Sequelize) {
     updatedAt: "updated_at",
   });
 
-  return TaskMedia;
+  return TaskMedia as ModelType<ITaskMedia, ITaskMedia, TaskMedia>;
+}
+
+export function initializeTaskMediaModelAssociation(
+  TaskMediaModel: ModelType,
+  ClientTaskModel: ModelType
+) {
+  TaskMediaModel.belongsTo(ClientTaskModel, {
+    foreignKey: "client_task_id",
+  });
 }

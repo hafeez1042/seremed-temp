@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
 import { IClientCaregiver } from "@seremedi/types/lib/models/customer/clientCaregiver"; // Adjust the import path as necessary
+import { ModelType } from "../../types/types";
 
 export function initializeClientCaregiverModel(sequelize: Sequelize) {
   class ClientCaregiver extends Model<IClientCaregiver> implements IClientCaregiver {
@@ -44,5 +45,19 @@ export function initializeClientCaregiverModel(sequelize: Sequelize) {
     updatedAt: "updated_at",
   });
 
-  return ClientCaregiver;
+  return ClientCaregiver as ModelType<IClientCaregiver, IClientCaregiver, ClientCaregiver>;
+}
+
+export function initializeClientCaregiverModelAssociation(
+  ClientCaregiverModel: ModelType,
+  ClientServiceModel: ModelType,
+  UserModel: ModelType,
+) {
+  ClientCaregiverModel.belongsTo(ClientServiceModel, {
+    foreignKey: "client_service_id",
+  });
+
+  ClientCaregiverModel.belongsTo(UserModel, {
+    foreignKey: "caregiver_id",
+  });
 }

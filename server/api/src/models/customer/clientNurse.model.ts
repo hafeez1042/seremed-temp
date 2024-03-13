@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
 import { IClientNurse } from "@seremedi/types/lib/models/customer/clientNurse"; // Adjust the import path as necessary
+import { ModelType } from "../../types/types";
 
 export function initializeClientNurseModel(sequelize: Sequelize) {
   class ClientNurse extends Model<IClientNurse> implements IClientNurse {
@@ -32,7 +33,7 @@ export function initializeClientNurseModel(sequelize: Sequelize) {
       type: DataTypes.UUID,
       allowNull: false,
       references: {
-        model: 'users', // Assuming the nurses are stored in a 'users' table
+        model: 'users',
         key: 'id',
       },
     },
@@ -52,5 +53,19 @@ export function initializeClientNurseModel(sequelize: Sequelize) {
     updatedAt: "updated_at",
   });
 
-  return ClientNurse;
+  return ClientNurse as ModelType<IClientNurse, IClientNurse, ClientNurse>;
+}
+
+export function initializeClientNurseModelAssociation(
+  ClientNurseModel: ModelType,
+  ClientServiceModel: ModelType,
+  UserModel: ModelType,
+) {
+  ClientNurseModel.belongsTo(ClientServiceModel, {
+    foreignKey: "client_service_id",
+  });
+
+  ClientNurseModel.belongsTo(UserModel, {
+    foreignKey: "nurse_id",
+  });
 }

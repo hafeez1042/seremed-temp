@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
 import { IClientProcedure } from "@seremedi/types/lib/models/customer/clientProcedure"; // Adjust the import path as necessary
+import { ModelType } from "../../types/types";
 
 export function initializeClientProcedureModel(sequelize: Sequelize) {
   class ClientProcedure extends Model<IClientProcedure> implements IClientProcedure {
@@ -49,5 +50,26 @@ export function initializeClientProcedureModel(sequelize: Sequelize) {
     updatedAt: "updated_at",
   });
 
-  return ClientProcedure;
+  return ClientProcedure as ModelType<IClientProcedure, IClientProcedure, ClientProcedure>;
 }
+
+export function initializeClientProcedureModelAssociation(
+  ClientProcedureModel: ModelType,
+  ClientModel: ModelType,
+  ProcedureModel: ModelType,
+  ProviderModel: ModelType,
+) {
+  ClientProcedureModel.belongsTo(ClientModel, {
+    foreignKey: "client_id"
+  })
+
+  ClientProcedureModel.belongsTo(ProcedureModel, {
+    foreignKey: "procedure_id"
+  })
+
+  ClientProcedureModel.belongsTo(ProviderModel, {
+    foreignKey: "provider_id"
+  })
+
+}
+

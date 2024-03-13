@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
 import { IClientConsent } from "@seremedi/types/lib/models/customer/clientConsent"; // Correct the import path as necessary
+import { ModelType } from "../../types/types";
 
 export function initializeClientConsentModel(sequelize: Sequelize) {
   class ClientConsent extends Model<IClientConsent> implements IClientConsent {
@@ -11,23 +12,43 @@ export function initializeClientConsentModel(sequelize: Sequelize) {
     public updated_by!: string;
   }
 
-  ClientConsent.init({
-    id: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
-      primaryKey: true,
+  ClientConsent.init(
+    {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+      },
+      created_at: DataTypes.DATE,
+      updated_at: DataTypes.DATE,
+      created_by: DataTypes.UUID,
+      updated_by: DataTypes.UUID,
     },
-    created_at: DataTypes.DATE,
-    updated_at: DataTypes.DATE,
-    created_by: DataTypes.UUID,
-    updated_by: DataTypes.UUID,
-  }, {
-    sequelize,
-    tableName: "client_consents",
-    timestamps: true,
-    createdAt: "created_at",
-    updatedAt: "updated_at",
-  });
+    {
+      sequelize,
+      tableName: "client_consents",
+      timestamps: true,
+      createdAt: "created_at",
+      updatedAt: "updated_at",
+    }
+  );
 
-  return ClientConsent;
+  return ClientConsent as ModelType<
+    IClientConsent,
+    IClientConsent,
+    ClientConsent
+  >;
+}
+
+export function initializeClientConsentModelAssociation(
+  ClientConsentModel: ModelType,
+  ClientTaskModel: ModelType,
+  ClientMedicationModel: ModelType
+) {
+  ClientConsentModel.hasOne(ClientTaskModel, {
+    foreignKey: "client_consent_id",
+  });
+  ClientConsentModel.hasOne(ClientMedicationModel, {
+    foreignKey: "client_consent_id",
+  });
 }

@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
 import { IClientSymptom } from "@seremedi/types/lib/models/customer/clientSymptom"; // Adjust the import path as necessary
+import { ModelType } from "../../types/types";
 
 export function initializeClientSymptomModel(sequelize: Sequelize) {
   class ClientSymptom extends Model<IClientSymptom> implements IClientSymptom {
@@ -47,5 +48,22 @@ export function initializeClientSymptomModel(sequelize: Sequelize) {
     updatedAt: "updated_at",
   });
 
-  return ClientSymptom;
+  return ClientSymptom as ModelType<IClientSymptom, IClientSymptom, ClientSymptom>;
+}
+
+export function initializeClientSymptomModelAssociation(
+  ClientSymptomModel: ModelType,
+  ClientTaskModel: ModelType,
+  SymptomModel: ModelType,
+  SymptomQuestionnaireResponseModel: ModelType
+) {
+  ClientSymptomModel.belongsTo(ClientTaskModel, {
+    foreignKey: "client_task_id",
+  });
+  ClientSymptomModel.belongsTo(SymptomModel, {
+    foreignKey: "symptom_id",
+  });
+  ClientSymptomModel.hasMany(SymptomQuestionnaireResponseModel, {
+    foreignKey: "client_symptom_id",
+  });
 }

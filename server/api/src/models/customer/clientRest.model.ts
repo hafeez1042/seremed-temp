@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
 import { IClientRest } from "@seremedi/types/lib/models/customer/clientRest"; // Adjust the import path as necessary
+import { ModelType } from "../../types/types";
 
 export function initializeClientRestModel(sequelize: Sequelize) {
   class ClientRest extends Model<IClientRest> implements IClientRest {
@@ -43,5 +44,15 @@ export function initializeClientRestModel(sequelize: Sequelize) {
     updatedAt: "updated_at",
   });
 
-  return ClientRest;
+  return ClientRest as ModelType<IClientRest, IClientRest, ClientRest>;
+}
+
+
+export function initializeClientRestModelAssociation(
+  ClientRestModel: ModelType,
+  ClientTaskModel: ModelType,
+) {
+  ClientRestModel.belongsTo(ClientTaskModel, {
+    foreignKey: "client_task_id",
+  });
 }

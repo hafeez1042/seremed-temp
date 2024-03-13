@@ -1,6 +1,7 @@
 import { DataTypes, Model, Optional, Sequelize } from "sequelize";
 import { IUserAddress } from "@seremedi/types/lib/models/customer/userAddress"; // Correct the import path as necessary
 import { AddressTypeEnum, modelAttributesOptionalTypes } from "@seremedi/types/lib/types";
+import { ModelType } from "../../types/types";
 
 interface IUserAddressCreationAttributes extends Optional<IUserAddress, modelAttributesOptionalTypes> {}
 
@@ -60,5 +61,19 @@ export function initializeUserAddressModel(sequelize: Sequelize) {
   });
 
 
-  return UserAddress;
+  return UserAddress as ModelType<IUserAddress, IUserAddressCreationAttributes, UserAddress>;
+}
+
+
+export function initializeUserAddressModelAssociation(
+  UserAddressModel: ModelType,
+  UserModel: ModelType,
+) {
+  UserAddressModel.belongsTo(UserModel, {
+    foreignKey: "user_id"
+  });
+  UserAddressModel.hasOne(UserModel, {
+    foreignKey: "primary_address_id"
+  });
+  
 }

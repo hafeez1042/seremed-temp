@@ -1,6 +1,7 @@
 import { DataTypes, Model, Optional, Sequelize } from "sequelize";
 import { IClientAddress } from "@seremedi/types/lib/models/customer/clientAddress"; // Adjust the import path as necessary
 import { AddressTypeEnum, modelAttributesOptionalTypes } from "@seremedi/types/lib/types";
+import { ModelType } from "../../types/types";
 
 interface IClientAddressCreationAttributes
   extends Optional<IClientAddress, modelAttributesOptionalTypes> {}
@@ -67,5 +68,18 @@ export function initializeClientAddressModel(sequelize: Sequelize) {
     }
   );
 
-  return ClientAddress;
+  return ClientAddress as ModelType<IClientAddress, IClientAddressCreationAttributes, ClientAddress>;
+}
+
+export function initializeClientAddressModelAssociation(
+  ClientAddressModel: ModelType,
+  ClientModel: ModelType,
+) {
+  ClientAddressModel.belongsTo(ClientModel, {
+    foreignKey: "client_id",
+  });
+
+  ClientAddressModel.hasOne(ClientModel, {
+    foreignKey: "primary_address_id",
+  });
 }

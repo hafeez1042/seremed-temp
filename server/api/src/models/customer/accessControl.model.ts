@@ -1,6 +1,7 @@
 import { DataTypes, Model, Optional, Sequelize } from "sequelize";
 import { IAccessControl } from "@seremedi/types/lib/models/customer/accessControl";
 import { modelAttributesOptionalTypes } from "@seremedi/types/lib/types";
+import { ModelType } from "../../types/types";
 
 interface IAccessControlCreationAttributes
   extends Optional<IAccessControl, modelAttributesOptionalTypes> {}
@@ -83,5 +84,14 @@ export function initializeAccessControlModel(sequelize: Sequelize) {
     }
   );
 
-  return AccessControl;
+  return AccessControl as ModelType<IAccessControl, IAccessControlCreationAttributes, AccessControl>;
+}
+
+export function initializeAccessControlModelAssociation(
+  AccessControlModel: ModelType,
+  RoleModel: ModelType,
+) {
+  AccessControlModel.belongsTo(RoleModel, {
+    foreignKey: "role_id",
+  });
 }

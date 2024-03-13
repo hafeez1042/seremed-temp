@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
 import { IClientFluidIntake } from "@seremedi/types/lib/models/customer/clientFluidIntake"; // Correct the import path as needed
+import { ModelType } from "../../types/types";
 
 export function initializeClientFluidIntakeModel(sequelize: Sequelize) {
   class ClientFluidIntake extends Model<IClientFluidIntake> implements IClientFluidIntake {
@@ -43,5 +44,14 @@ export function initializeClientFluidIntakeModel(sequelize: Sequelize) {
     updatedAt: "updated_at",
   });
 
-  return ClientFluidIntake;
+  return ClientFluidIntake as ModelType<IClientFluidIntake, IClientFluidIntake, ClientFluidIntake>;
+}
+
+export function initializeClientFluidIntakeModelAssociation(
+  ClientFluidIntakeModel: ModelType,
+  ClientTaskModel: ModelType,
+) {
+  ClientFluidIntakeModel.belongsTo(ClientTaskModel, {
+    foreignKey: "client_task_id",
+  });
 }

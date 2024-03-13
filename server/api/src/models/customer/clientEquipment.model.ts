@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
 import { IClientEquipment } from "@seremedi/types/lib/models/customer/clientEquipment"; // Correct the import path as needed
+import { ModelType } from "../../types/types";
 
 export function initializeClientEquipmentModel(sequelize: Sequelize) {
   class ClientEquipment extends Model<IClientEquipment> implements IClientEquipment {
@@ -47,5 +48,20 @@ export function initializeClientEquipmentModel(sequelize: Sequelize) {
     updatedAt: "updated_at",
   });
 
-  return ClientEquipment;
+  return ClientEquipment as ModelType<IClientEquipment, IClientEquipment, ClientEquipment>;
+}
+
+
+export function initializeClientEquipmentModelAssociation(
+  ClientEquipmentModel: ModelType,
+  ClientModel: ModelType,
+  EquipmentModel: ModelType
+) {
+  ClientEquipmentModel.belongsTo(ClientModel, {
+    foreignKey: "client_id",
+  });
+
+  ClientEquipmentModel.belongsTo(EquipmentModel, {
+    foreignKey: "equipment_id",
+  });
 }

@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
 import { ICareTeamReplacementRequest } from "@seremedi/types/lib/models/customer/careTeamReplacementRequest"; // Adjust the import path as necessary
+import { ModelType } from "../../types/types";
 
 export function initializeCareTeamReplacementRequestModel(sequelize: Sequelize) {
   class CareTeamReplacementRequest extends Model<ICareTeamReplacementRequest> implements ICareTeamReplacementRequest {
@@ -49,5 +50,23 @@ export function initializeCareTeamReplacementRequestModel(sequelize: Sequelize) 
     updatedAt: "updated_at",
   });
 
-  return CareTeamReplacementRequest;
+  return CareTeamReplacementRequest as ModelType<ICareTeamReplacementRequest, ICareTeamReplacementRequest, CareTeamReplacementRequest>;
+}
+
+
+export function initializeCareTeamReplacementRequestModelAssociation(
+  CareTeamReplacementRequestModel: ModelType,
+  ClientModel: ModelType,
+  UserModel: ModelType
+) {
+  CareTeamReplacementRequestModel.belongsTo(ClientModel, {
+    foreignKey: "client_id"
+  })
+  CareTeamReplacementRequestModel.belongsTo(UserModel, {
+    foreignKey: "prev_care_team_id"
+  })
+  CareTeamReplacementRequestModel.belongsTo(UserModel, {
+    foreignKey: "new_care_team_id"
+  })
+
 }

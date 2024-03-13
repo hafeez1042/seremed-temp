@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
 import { IClientVital } from "@seremedi/types/lib/models/customer/clientVital"; // Adjust the import path as necessary
+import { ModelType } from "../../types/types";
 
 export function initializeClientVitalModel(sequelize: Sequelize) {
   class ClientVital extends Model<IClientVital> implements IClientVital {
@@ -47,5 +48,35 @@ export function initializeClientVitalModel(sequelize: Sequelize) {
     updatedAt: "updated_at",
   });
 
-  return ClientVital;
+  return ClientVital as ModelType<IClientVital, IClientVital, ClientVital>;
 }
+
+
+export function initializeClientVitalModelAssociation(
+  ClientVitalModel: ModelType,
+  ClientTaskModel: ModelType,
+  VitalModel: ModelType,
+  BloodPressureModel: ModelType,
+  HeartRateModel: ModelType,
+  BodyTemperatureModel: ModelType,
+  OxygenSaturationModel: ModelType,
+  PainLevelModel: ModelType,
+  DrainLevelModel: ModelType,
+  AlertnessLevelModel: ModelType
+) {
+  ClientVitalModel.belongsTo(ClientTaskModel, {
+    foreignKey: "client_task_id",
+  });
+  ClientVitalModel.belongsTo(VitalModel, {
+    foreignKey: "vital_id",
+  });
+
+  ClientVitalModel.hasOne(BloodPressureModel, {foreignKey: "client_vital_id"})
+  ClientVitalModel.hasOne(HeartRateModel, {foreignKey: "client_vital_id"})
+  ClientVitalModel.hasOne(BodyTemperatureModel, {foreignKey: "client_vital_id"})
+  ClientVitalModel.hasOne(OxygenSaturationModel, {foreignKey: "client_vital_id"})
+  ClientVitalModel.hasOne(PainLevelModel, {foreignKey: "client_vital_id"})
+  ClientVitalModel.hasOne(DrainLevelModel, {foreignKey: "client_vital_id"})
+  ClientVitalModel.hasOne(AlertnessLevelModel, {foreignKey: "client_vital_id"})
+}
+

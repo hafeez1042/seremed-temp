@@ -1,10 +1,14 @@
-import { DataTypes, Model, Sequelize } from "sequelize";
+import { DataTypes, Model, Optional, Sequelize } from "sequelize";
 import { IRole } from "@seremedi/types/lib/models/customer/role"; // Adjust the import path as necessary
 import { modelAttributesOptionalTypes } from "@seremedi/types/lib/types";
+import { ModelType } from "../../types/types";
+
+interface IRoleCreationAttributes
+  extends Optional<IRole, modelAttributesOptionalTypes> {}
 
 export function initializeRoleModel(sequelize: Sequelize) {
   class Role
-    extends Model<IRole, modelAttributesOptionalTypes>
+    extends Model<IRole, IRoleCreationAttributes>
     implements IRole
   {
     public id!: string;
@@ -43,5 +47,26 @@ export function initializeRoleModel(sequelize: Sequelize) {
     }
   );
 
-  return Role;
+  return Role as ModelType<IRole, IRoleCreationAttributes, Role>;
+}
+
+
+export function initializeRoleModelAssociation(
+  RoleModel: ModelType,
+  UserRoleModel: ModelType,
+  UserModel: ModelType,
+  AccessControlModel: ModelType,
+) {
+  RoleModel.hasMany(UserRoleModel, {
+    foreignKey: "role_id",
+  });
+
+  RoleModel.belongsToMany(UserModel, {
+    through: UserRoleModel,
+    uniqueKey: "role_id",
+  });
+
+  RoleModel.belongsTo(AccessControlModel, {
+    foreignKey: "role_id",
+  });
 }
