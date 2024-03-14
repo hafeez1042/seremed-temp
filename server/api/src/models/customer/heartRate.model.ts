@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
 import { IHeartRate } from "@seremedi/types/lib/models/customer/heartRate"; // Adjust the import path as necessary
+import { ModelType } from "../../types/types";
 
 export function initializeHeartRateModel(sequelize: Sequelize) {
   class HeartRate extends Model<IHeartRate> implements IHeartRate {
@@ -48,5 +49,14 @@ export function initializeHeartRateModel(sequelize: Sequelize) {
     }
   );
 
-  return HeartRate;
+  return HeartRate as ModelType<IHeartRate, IHeartRate, HeartRate>;
+}
+
+export function initializeHeartRateModelAssociation(
+  HeartRateModel: ModelType,
+  ClientVitalModel: ModelType
+) {
+  HeartRateModel.belongsTo(ClientVitalModel, {
+    foreignKey: "client_vital_id",
+  });
 }

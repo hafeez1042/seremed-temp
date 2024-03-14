@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
 import { IOxygenSaturation } from "@seremedi/types/lib/models/customer/oxygenSaturation"; // Adjust the import path as necessary
+import { ModelType } from "../../types/types";
 
 export function initializeOxygenSaturationModel(sequelize: Sequelize) {
   class OxygenSaturation extends Model<IOxygenSaturation> implements IOxygenSaturation {
@@ -43,5 +44,15 @@ export function initializeOxygenSaturationModel(sequelize: Sequelize) {
     updatedAt: "updated_at",
   });
 
-  return OxygenSaturation;
+  return OxygenSaturation as ModelType<IOxygenSaturation, IOxygenSaturation, OxygenSaturation>;
+}
+
+
+export function initializeOxygenSaturationModelAssociation(
+  OxygenSaturationModel: ModelType,
+  ClientVitalModel: ModelType
+) {
+  OxygenSaturationModel.belongsTo(ClientVitalModel, {
+    foreignKey: "client_vital_id",
+  });
 }

@@ -1,6 +1,7 @@
 import { DataTypes, Model, Optional, Sequelize } from "sequelize";
 import { ISurgeon } from "@seremedi/types/lib/models/customer/surgeon"; // Update the import path as needed
 import { modelAttributesOptionalTypes } from "@seremedi/types/lib/types";
+import { ModelType } from "../../types/types";
 
 interface ISurgeonCreationAttributes extends Optional<ISurgeon, modelAttributesOptionalTypes> {}
 
@@ -39,5 +40,15 @@ export function initializeSurgeonModel(sequelize: Sequelize) {
     updatedAt: "updated_at",
   });
 
-  return Surgeon;
+  return Surgeon as ModelType<ISurgeon, ISurgeonCreationAttributes, Surgeon>;
+}
+
+
+export function initializeSurgeonModelAssociation(
+  SurgeonModel: ModelType,
+  ProviderModel: ModelType,
+) {
+  SurgeonModel.belongsTo(ProviderModel, {
+    foreignKey: "provider_id",
+  });
 }

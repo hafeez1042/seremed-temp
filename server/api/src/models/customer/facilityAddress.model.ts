@@ -1,6 +1,7 @@
 import { DataTypes, Model, Optional, Sequelize } from "sequelize";
 import { IFacilityAddress } from "@seremedi/types/lib/models/customer/facilityAddress"; // Adjust the import path as necessary
 import { AddressTypeEnum, modelAttributesOptionalTypes } from "@seremedi/types/lib/types";
+import { ModelType } from "../../types/types";
 
 interface IFacilityAddressCreationAttributes extends Optional<IFacilityAddress, modelAttributesOptionalTypes> {}
 
@@ -60,5 +61,18 @@ export function initializeFacilityAddressModel(sequelize: Sequelize) {
     updatedAt: "updated_at",
   });
 
-  return FacilityAddress;
+  return FacilityAddress as ModelType<IFacilityAddress, IFacilityAddressCreationAttributes, FacilityAddress>;
+}
+
+export function initializeFacilityAddressModelAssociation(
+  FacilityAddressModel: ModelType,
+  FacilityModel: ModelType,
+) {
+  FacilityAddressModel.belongsTo(FacilityModel, {
+    foreignKey: "primary_address_id",
+  });
+
+  FacilityModel.hasOne(FacilityAddressModel, {
+    foreignKey: "facility_id",
+  });
 }

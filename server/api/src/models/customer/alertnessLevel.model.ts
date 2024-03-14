@@ -50,8 +50,12 @@ export function initializeAlertnessLevelModel(sequelize: Sequelize) {
 export function initializeAlertnessLevelModelAssociation(
   AlertnessLevelModel: ModelType,
   ClientVitalModel: ModelType,
+  AlertnessQuestionnaireResponseModel: ModelType,
 ) {
   AlertnessLevelModel.belongsTo(ClientVitalModel, {
     foreignKey: "client_vital_id",
+  });
+  AlertnessLevelModel.hasMany(AlertnessQuestionnaireResponseModel, {
+    foreignKey: "alert_level_id",
   });
 }

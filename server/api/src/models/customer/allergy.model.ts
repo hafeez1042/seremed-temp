@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
 import { IAllergy } from "@seremedi/types/lib/models/customer/allergy"; // Adjust the import path as necessary
+import { ModelType } from "../../types/types";
 
 export function initializeAllergyModel(sequelize: Sequelize) {
   class Allergy extends Model<IAllergy> implements IAllergy {
@@ -12,27 +13,39 @@ export function initializeAllergyModel(sequelize: Sequelize) {
     public updated_by!: string;
   }
 
-  Allergy.init({
-    id: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
-      primaryKey: true,
+  Allergy.init(
+    {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+      },
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      created_at: DataTypes.DATE,
+      updated_at: DataTypes.DATE,
+      created_by: DataTypes.UUID,
+      updated_by: DataTypes.UUID,
     },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    created_at: DataTypes.DATE,
-    updated_at: DataTypes.DATE,
-    created_by: DataTypes.UUID,
-    updated_by: DataTypes.UUID,
-  }, {
-    sequelize,
-    tableName: "allergies",
-    timestamps: true,
-    createdAt: "created_at",
-    updatedAt: "updated_at",
-  });
+    {
+      sequelize,
+      tableName: "allergies",
+      timestamps: true,
+      createdAt: "created_at",
+      updatedAt: "updated_at",
+    }
+  );
 
-  return Allergy;
+  return Allergy as ModelType<IAllergy, IAllergy, Allergy>;
+}
+
+export function initializeAllergyModelAssociation(
+  AllergyModel: ModelType,
+  ClientAllergyModel: ModelType
+) {
+  AllergyModel.hasMany(ClientAllergyModel, {
+    foreignKey: "allergy_id",
+  });
 }

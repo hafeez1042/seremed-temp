@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
 import { IAlertnessQuestionnaireResponse } from "@seremedi/types/lib/models/customer/alertnessQuestionnaireResponse"; // Adjust the import path as necessary
+import { ModelType } from "../../types/types";
 
 export function initializeAlertnessQuestionnaireResponseModel(sequelize: Sequelize) {
   class AlertnessQuestionnaireResponse extends Model<IAlertnessQuestionnaireResponse> implements IAlertnessQuestionnaireResponse {
@@ -52,5 +53,19 @@ export function initializeAlertnessQuestionnaireResponseModel(sequelize: Sequeli
     updatedAt: "updated_at",
   });
 
-  return AlertnessQuestionnaireResponse;
+  return AlertnessQuestionnaireResponse as ModelType<IAlertnessQuestionnaireResponse, IAlertnessQuestionnaireResponse, AlertnessQuestionnaireResponse>;
+}
+
+export function initializeAlertnessLevelModelAssociation(
+  AlertnessQuestionnaireResponseModel: ModelType,
+  AlertnessLevelModel: ModelType,
+  AlertnessQuestionnaireModel: ModelType,
+  
+) {
+  AlertnessQuestionnaireResponseModel.belongsTo(AlertnessQuestionnaireModel, {
+    foreignKey: "alertness_questionnaire_id",
+  });
+  AlertnessQuestionnaireResponseModel.belongsTo(AlertnessLevelModel, {
+    foreignKey: "alert_level_id",
+  });
 }

@@ -1,6 +1,7 @@
 import { DataTypes, Model, Optional, Sequelize } from "sequelize";
 import { ICaregiver } from "@seremedi/types/lib/models/customer/caregiver"; // Adjust the import path as necessary
 import { modelAttributesOptionalTypes } from "@seremedi/types/lib/types";
+import { ModelType } from "../../types/types";
 
 interface ICaregiverCreationAttributes extends Optional<ICaregiver, modelAttributesOptionalTypes> {}
 
@@ -37,5 +38,14 @@ export function initializeCaregiverModel(sequelize: Sequelize) {
     updatedAt: "updated_at",
   });
 
-  return Caregiver;
+  return Caregiver as ModelType<ICaregiver, ICaregiverCreationAttributes, Caregiver>;
+}
+
+export function initializeCaregiverModelAssociation(
+  CaregiverModel: ModelType,
+  ProviderModel: ModelType,
+) {
+  CaregiverModel.belongsTo(ProviderModel, {
+    foreignKey: "provider_id",
+  });
 }

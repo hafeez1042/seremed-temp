@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
 import { IBloodPressure } from "@seremedi/types/lib/models/customer/bloodPressure"; // Adjust the import path as necessary
+import { ModelType } from "../../types/types";
 
 export function initializeBloodPressureModel(sequelize: Sequelize) {
   class BloodPressure extends Model<IBloodPressure> implements IBloodPressure {
@@ -53,5 +54,14 @@ export function initializeBloodPressureModel(sequelize: Sequelize) {
     updatedAt: "updated_at",
   });
 
-  return BloodPressure;
+  return BloodPressure as ModelType<IBloodPressure, IBloodPressure, BloodPressure>;
+}
+
+export function initializeBloodPressureModelAssociation(
+  BloodPressureModel: ModelType,
+  ClientVitalModel: ModelType
+) {
+  BloodPressureModel.belongsTo(ClientVitalModel, {
+    foreignKey: "client_vital_id",
+  });
 }

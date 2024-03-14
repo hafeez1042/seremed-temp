@@ -1,6 +1,7 @@
 import { DataTypes, Model, Optional, Sequelize } from "sequelize";
 import { IProvider } from "@seremedi/types/lib/models/customer/provider"; // Update the import path as needed
 import { modelAttributesOptionalTypes } from "@seremedi/types/lib/types";
+import { ModelType } from "../../types/types";
 
 interface IProviderCreationAttributes
   extends Optional<IProvider, modelAttributesOptionalTypes> {}
@@ -63,5 +64,34 @@ export function initializeProviderModel(sequelize: Sequelize) {
     }
   );
 
-  return Provider;
+  return Provider as ModelType<
+    IProvider,
+    IProviderCreationAttributes,
+    Provider
+  >;
+}
+
+export function initializeProviderModelAssociation(
+  ProviderModel: ModelType,
+  ProviderAddressModel: ModelType,
+  SurgeonModel: ModelType,
+  NurseModel: ModelType,
+  CaregiverModel: ModelType
+) {
+  ProviderModel.belongsTo(ProviderModel, {
+    foreignKey: "primary_address_id",
+  });
+
+  ProviderModel.hasMany(ProviderAddressModel, {
+    foreignKey: "provider_id",
+  });
+  ProviderModel.hasMany(SurgeonModel, {
+    foreignKey: "provider_id",
+  });
+  ProviderModel.hasMany(NurseModel, {
+    foreignKey: "provider_id",
+  });
+  ProviderModel.hasMany(CaregiverModel, {
+    foreignKey: "provider_id",
+  });
 }

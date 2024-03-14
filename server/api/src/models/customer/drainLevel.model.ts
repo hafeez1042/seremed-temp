@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
 import { IDrainLevel } from "@seremedi/types/lib/models/customer/drainLevel"; // Adjust the import path as necessary
+import { ModelType } from "../../types/types";
 
 export function initializeDrainLevelModel(sequelize: Sequelize) {
   class DrainLevel extends Model<IDrainLevel> implements IDrainLevel {
@@ -43,5 +44,15 @@ export function initializeDrainLevelModel(sequelize: Sequelize) {
     updatedAt: "updated_at",
   });
 
-  return DrainLevel;
+  return DrainLevel as ModelType<IDrainLevel, IDrainLevel, DrainLevel>;
+}
+
+
+export function initializeDrainLevelModelAssociation(
+  DrainLevelModel: ModelType,
+  ClientVitalModel: ModelType
+) {
+  DrainLevelModel.belongsTo(ClientVitalModel, {
+    foreignKey: "client_vital_id",
+  });
 }

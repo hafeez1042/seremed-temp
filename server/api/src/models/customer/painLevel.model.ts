@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
 import { IPainLevel } from "@seremedi/types/lib/models/customer/painLevel"; // Adjust the import path as necessary
+import { ModelType } from "../../types/types";
 
 export function initializePainLevelModel(sequelize: Sequelize) {
   class PainLevel extends Model<IPainLevel> implements IPainLevel {
@@ -13,35 +14,47 @@ export function initializePainLevelModel(sequelize: Sequelize) {
     public updated_by!: string;
   }
 
-  PainLevel.init({
-    id: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
-      primaryKey: true,
-    },
-    points: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
-    client_vital_id: {
-      type: DataTypes.UUID,
-      allowNull: true,
-      references: {
-        model: 'client_vitals', // Ensure this matches your actual client vitals table name
-        key: 'id',
+  PainLevel.init(
+    {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
       },
+      points: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      },
+      client_vital_id: {
+        type: DataTypes.UUID,
+        allowNull: true,
+        references: {
+          model: "client_vitals", // Ensure this matches your actual client vitals table name
+          key: "id",
+        },
+      },
+      created_at: DataTypes.DATE,
+      updated_at: DataTypes.DATE,
+      created_by: DataTypes.UUID,
+      updated_by: DataTypes.UUID,
     },
-    created_at: DataTypes.DATE,
-    updated_at: DataTypes.DATE,
-    created_by: DataTypes.UUID,
-    updated_by: DataTypes.UUID,
-  }, {
-    sequelize,
-    tableName: "pain_levels",
-    timestamps: true,
-    createdAt: "created_at",
-    updatedAt: "updated_at",
-  });
+    {
+      sequelize,
+      tableName: "pain_levels",
+      timestamps: true,
+      createdAt: "created_at",
+      updatedAt: "updated_at",
+    }
+  );
 
-  return PainLevel;
+  return PainLevel as ModelType<IPainLevel, IPainLevel, PainLevel>;
+}
+
+export function initializePainLevelModelAssociation(
+  PainLevelModel: ModelType,
+  ClientVitalModel: ModelType
+) {
+  PainLevelModel.belongsTo(ClientVitalModel, {
+    foreignKey: "client_vital_id",
+  });
 }

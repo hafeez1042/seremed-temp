@@ -4,6 +4,7 @@ import {
   AddressTypeEnum,
   modelAttributesOptionalTypes,
 } from "@seremedi/types/lib/types";
+import { ModelType } from "../../types/types";
 
 interface IProviderAddressCreationAttributes
   extends Optional<IProviderAddress, modelAttributesOptionalTypes> {}
@@ -74,5 +75,19 @@ export function initializeProviderAddressModel(sequelize: Sequelize) {
     }
   );
 
-  return ProviderAddress;
+  return ProviderAddress as ModelType<IProviderAddress, IProviderAddressCreationAttributes, ProviderAddress>;
+}
+
+
+export function initializeProviderAddressModelAssociation(
+  ProviderAddressModel: ModelType,
+  ProviderModel: ModelType,
+) {
+  ProviderAddressModel.hasOne(ProviderModel, {
+    foreignKey: "primary_address_id",
+  });
+
+  ProviderModel.belongsTo(ProviderAddressModel, {
+    foreignKey: "provider_id",
+  });
 }
