@@ -73,13 +73,15 @@ export function initializeClientModelAssociation(
   ProviderModel: ModelType,
   ProcedureModel: ModelType,
   EquipmentModel: ModelType,
-  UserModel: ModelType
+  UserModel: ModelType,
+  AddressModel: ModelType
 ) {
-  ClientModel.belongsTo(ClientAddressModel, {
+  ClientModel.belongsTo(AddressModel, {
     foreignKey: "primary_address_id",
   });
-  ClientModel.hasMany(ClientAddressModel, {
-    foreignKey: "client_id",
+  ClientModel.belongsToMany(AddressModel, {
+    through: ClientAddressModel,
+    uniqueKey: "client_id",
   });
 
   ClientModel.hasMany(ClientServiceModel, {

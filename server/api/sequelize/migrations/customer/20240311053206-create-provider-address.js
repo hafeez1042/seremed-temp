@@ -21,20 +21,16 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      // Define other address fields
-      suit_number: Sequelize.STRING,
-      apartment_unit_number: Sequelize.STRING,
-      street_line_1: Sequelize.STRING,
-      street_line_2: Sequelize.STRING,
-      city: Sequelize.STRING,
-      county: Sequelize.STRING,
-      state: Sequelize.STRING,
-      country: Sequelize.STRING,
-      zip_code: Sequelize.STRING,
-      phone_number: Sequelize.STRING,
-      email: Sequelize.STRING,
-      address_type: Sequelize.STRING,
-      // Base model timestamps
+      address_id: {
+        type: Sequelize.UUID,
+        allowNull: false,
+        references: {
+          model: "addresses",
+          key: "id",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,

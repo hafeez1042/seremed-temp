@@ -76,14 +76,16 @@ export function initializeProviderModelAssociation(
   ProviderAddressModel: ModelType,
   SurgeonModel: ModelType,
   NurseModel: ModelType,
-  CaregiverModel: ModelType
+  CaregiverModel: ModelType,
+  AddressModel: ModelType
 ) {
-  ProviderModel.belongsTo(ProviderModel, {
+  ProviderModel.belongsTo(AddressModel, {
     foreignKey: "primary_address_id",
   });
 
-  ProviderModel.hasMany(ProviderAddressModel, {
-    foreignKey: "provider_id",
+  ProviderModel.belongsToMany(AddressModel, {
+    through: ProviderAddressModel,
+    uniqueKey: "provider_id",
   });
   ProviderModel.hasMany(SurgeonModel, {
     foreignKey: "provider_id",

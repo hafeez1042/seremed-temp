@@ -1,5 +1,6 @@
-import { IAddress, IBaseModelAttributes } from "../../types";
+import { IBaseModelAttributes } from "../../types";
 
-export interface IUserAddress extends IBaseModelAttributes, IAddress {
+export interface IUserAddress extends IBaseModelAttributes {
   user_id: string;
+  address_id: string;
 }

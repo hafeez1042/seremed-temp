@@ -20,27 +20,16 @@ module.exports = {
         onUpdate: "CASCADE",
         onDelete: "CASCADE", // Adjust depending on desired behavior when a User is deleted
       },
-      suit_number: Sequelize.STRING,
-      apartment_unit_number: Sequelize.STRING,
-      street_line_1: {
-        type: Sequelize.STRING,
+      address_id: {
+        type: Sequelize.UUID,
         allowNull: false,
+        references: {
+          model: "addresses",
+          key: "id",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       },
-      street_line_2: Sequelize.STRING,
-      city: Sequelize.STRING,
-      county: Sequelize.STRING,
-      state: Sequelize.STRING,
-      country: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      zip_code: Sequelize.STRING,
-      phone_number: Sequelize.STRING,
-      email: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      address_type: Sequelize.ENUM("HOME", "WORK", "OTHER"), // Replace with your actual enum values
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,

@@ -49,13 +49,15 @@ export function initializeFacilityModelAssociation(
   FacilityModel: ModelType,
   ProviderModel: ModelType,
   FacilityAddressModel: ModelType,
+  AddressModel: ModelType
 ) {
-  FacilityModel.belongsTo(FacilityAddressModel, {
+  FacilityModel.belongsTo(AddressModel, {
     foreignKey: "primary_address_id",
   });
 
-  FacilityModel.hasMany(FacilityAddressModel, {
-    foreignKey: "facility_id",
+  FacilityModel.belongsToMany(AddressModel, {
+    through: FacilityAddressModel,
+    uniqueKey: "facility_id",
   });
   FacilityModel.hasMany(ProviderModel, {
     foreignKey: "facility_id",
